@@ -59,6 +59,7 @@ class Connection
         $encodedPayload = base64_encode(serialize([$data, $context]))."\n";
 
         set_error_handler([self::class, 'nullErrorHandler']);
+
         try {
             if (-1 !== stream_socket_sendto($this->socket, $encodedPayload)) {
                 return true;
@@ -86,8 +87,9 @@ class Connection
     private function createSocket()
     {
         set_error_handler([self::class, 'nullErrorHandler']);
+
         try {
-            return stream_socket_client($this->host, $errno, $errstr, 3, STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT);
+            return stream_socket_client($this->host, $errno, $errstr, 3);
         } finally {
             restore_error_handler();
         }
